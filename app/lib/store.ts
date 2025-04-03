@@ -34,7 +34,10 @@ export const useGenerateStore = create<GenerateState>((set) => ({
     set({ isGenerating: true });
     try {
       const result = await apiGenerateImage({ prompt, style });
-      if (result.success && result.data?.imageUrl) {
+      if (!result.success) {
+        throw new Error(result.message || '生成图片失败');
+      }
+      if (result.data?.imageUrl) {
         set((state) => ({
           generatedImages: [
             {
@@ -46,7 +49,12 @@ export const useGenerateStore = create<GenerateState>((set) => ({
             ...state.generatedImages,
           ],
         }));
+      } else {
+        throw new Error('生成的图片数据无效');
       }
+    } catch (error) {
+      console.error('生成图片时出错:', error);
+      throw error; // 确保错误被传递给组件
     } finally {
       set({ isGenerating: false });
     }

@@ -9,11 +9,16 @@ export default function GeneratePage() {
   const [error, setError] = useState<string | null>(null);
   const { isGenerating, generatedImages, generateImage } = useGenerateStore();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!prompt.trim()) {
+      setError('请输入描述文字');
+      return;
+    }
+    
     setError(null);
     try {
-      await generateImage({ prompt, style });
+      await generateImage({ prompt: prompt.trim(), style });
       setPrompt('');
     } catch (err) {
       setError(err instanceof Error ? err.message : '生成图片时发生错误，请重试');

@@ -10,12 +10,23 @@ export async function generateImage(params: GenerateImageParams): Promise<ApiRes
       body: JSON.stringify(params),
     });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
+    
+    // 检查响应格式
+    if (!data || typeof data !== 'object') {
+      throw new Error('Invalid response format');
+    }
+
     return data;
   } catch (error) {
+    console.error('API调用错误:', error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : '生成图片失败',
+      message: error instanceof Error ? error.message : '生成图片失败，请重试',
     };
   }
 }
