@@ -6,12 +6,19 @@ import { useGenerateStore } from '@/lib/store';
 export default function GeneratePage() {
   const [prompt, setPrompt] = useState('');
   const [style, setStyle] = useState('ghibli');
+  const [error, setError] = useState<string | null>(null);
   const { isGenerating, generatedImages, generateImage } = useGenerateStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await generateImage({ prompt, style });
-    setPrompt('');
+    setError(null);
+    try {
+      await generateImage({ prompt, style });
+      setPrompt('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '生成图片时发生错误，请重试');
+      console.error('生成图片错误:', err);
+    }
   };
 
   return (
@@ -33,6 +40,12 @@ export default function GeneratePage() {
               />
             </div>
 
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
             <div className="flex gap-4">
               <select
                 value={style}
@@ -47,9 +60,19 @@ export default function GeneratePage() {
               <button
                 type="submit"
                 disabled={isGenerating || !prompt}
-                className="flex-1 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition"
+                className="flex-1 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
               >
-                {isGenerating ? 'Generating...' : 'Generate Image'}
+                {isGenerating ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    生成中...
+                  </>
+                ) : (
+                  '生成图片'
+                )}
               </button>
             </div>
           </form>

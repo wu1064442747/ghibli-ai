@@ -30,7 +30,7 @@ export async function generateImageWithStability({
     height: 1024,
   },
 }: GenerateImageParams): Promise<string> {
-  const apiKey = process.env.STABILITY_API_KEY;
+  const apiKey = process.env.STABLE_DIFFUSION_API_KEY;
   if (!apiKey) {
     throw new Error('Stability API key not found');
   }
@@ -39,7 +39,7 @@ export async function generateImageWithStability({
   const enhancedPrompt = style === 'ghibli' ? getGhibliPrompt(prompt) : `${prompt}, ${style} style`;
 
   const response = await fetch(
-    'https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image',
+    process.env.STABLE_DIFFUSION_API_URL || 'https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image',
     {
       method: 'POST',
       headers: {
