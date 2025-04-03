@@ -10,8 +10,6 @@ const nextConfig = {
       },
     ],
   },
-  distDir: '.next',
-  trailingSlash: true,
 };
 
 module.exports = nextConfig;
