@@ -33,7 +33,7 @@ export const useGenerateStore = create<GenerateState>((set) => ({
   generateImage: async ({ prompt, style }) => {
     set({ isGenerating: true });
     try {
-      const result = await apiGenerateImage(prompt, style);
+      const result = await apiGenerateImage({ prompt, style });
       if (result.success && result.data?.imageUrl) {
         set((state) => ({
           generatedImages: [
@@ -59,7 +59,13 @@ export const useCharacterStore = create<CharacterState>((set) => ({
   createCharacter: async ({ name, description }) => {
     set({ isCreating: true });
     try {
-      const result = await apiCreateCharacter(name, description);
+      const result = await apiCreateCharacter({
+        name,
+        description,
+        age: 'Unknown',
+        role: 'Character',
+        personality: ['Mysterious'],
+      });
       if (result.success && result.data?.imageUrl) {
         set((state) => ({
           characters: [
