@@ -20,7 +20,7 @@ export default function GeneratePage() {
       const result = await generateImage({ prompt, style });
       
       if (result.success && result.data) {
-        addGeneratedImage(result.data);
+        addGeneratedImage(result.data.imageUrl);
         setPrompt('');
       } else {
         setError(result.message || '生成失败，请重试');

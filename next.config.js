@@ -10,7 +10,7 @@ const nextConfig = {
       },
     ],
   },
-  distDir: '.next'
-}
+  distDir: '.next',
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
