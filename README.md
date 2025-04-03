@@ -1,15 +1,15 @@
 # Ghibli AI
 
-使用AI创造吉卜力风格的艺术作品。
+Create Ghibli-style artwork using AI technology.
 
-## 功能特点
+## Features
 
-- 吉卜力风格图片生成
-- 吉卜力风格角色创建
-- 资源中心
-- 提示词库
+- Ghibli-style image generation
+- Ghibli-style character creation
+- Resource center
+- Prompt library
 
-## 技术栈
+## Tech Stack
 
 - Next.js
 - TypeScript
@@ -18,51 +18,51 @@
 - OpenAI API
 - Stable Diffusion API
 
-## 开始使用
+## Getting Started
 
-1. 克隆仓库
+1. Clone the repository
 
 ```bash
 git clone https://github.com/yourusername/ghibli-ai.git
 cd ghibli-ai
 ```
 
-2. 安装依赖
+2. Install dependencies
 
 ```bash
 npm install
 ```
 
-3. 配置环境变量
+3. Configure environment variables
 
-复制 `.env.local.example` 文件为 `.env.local` 并填写必要的环境变量：
+Copy `.env.local.example` to `.env.local` and fill in the required environment variables:
 
 ```bash
 cp .env.local.example .env.local
 ```
 
-4. 启动开发服务器
+4. Start the development server
 
 ```bash
 npm run dev
 ```
 
-访问 [http://localhost:3000](http://localhost:3000) 查看应用。
+Visit [http://localhost:3000](http://localhost:3000) to view the application.
 
-## 部署
+## Deployment
 
-本项目使用 Cloudflare Pages 进行部署。
+This project is deployed using Cloudflare Pages.
 
-1. 将代码推送到 GitHub 仓库
-2. 在 Cloudflare Pages 中创建新项目
-3. 连接 GitHub 仓库
-4. 配置环境变量
-5. 部署
+1. Push code to GitHub repository
+2. Create a new project in Cloudflare Pages
+3. Connect GitHub repository
+4. Configure environment variables
+5. Deploy
 
-## 贡献
+## Contributing
 
-欢迎提交 Pull Request 或创建 Issue。
+Pull requests and issues are welcome.
 
-## 许可证
+## License
 
 MIT 

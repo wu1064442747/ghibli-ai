@@ -5,7 +5,7 @@ compatibility_date = "2024-01-01"
 command = "npm run build"
 
 [build.production]
-pages_build_output_dir = ".next/standalone"
+pages_build_output_dir = "out"
 
 [[build.production.d1_databases]]
 binding = "DB"
@@ -18,4 +18,4 @@ routes = [
 ]
 
 [site]
-bucket = ".next" 
+bucket = "out" 
