@@ -1,6 +1,12 @@
 import { GenerateImageParams, CreateCharacterParams, ApiResponse, ShareParams } from '@/types';
 
-export async function generateImage(params: GenerateImageParams): Promise<ApiResponse<{ imageUrl: string }>> {
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  message?: string;
+}
+
+export async function generateImage(params: { prompt: string; style: string }): Promise<ApiResponse<{ imageUrl: string }>> {
   try {
     const response = await fetch('/api/generate', {
       method: 'POST',
@@ -10,13 +16,19 @@ export async function generateImage(params: GenerateImageParams): Promise<ApiRes
       body: JSON.stringify(params),
     });
 
+    if (!response.ok) {
+      throw new Error('图片生成失败');
+    }
+
     const data = await response.json();
-    return data;
+    return {
+      success: true,
+      data,
+    };
   } catch (error) {
-    console.error('生成图片请求失败:', error);
     return {
       success: false,
-      message: '生成图片请求失败，请重试',
+      message: error instanceof Error ? error.message : '图片生成失败',
     };
   }
 }
@@ -41,17 +53,9 @@ export async function generateBatchImages(params: {
   return response.json();
 }
 
-export async function createCharacter(params: CreateCharacterParams): Promise<ApiResponse<{
-  name: string;
-  description: string;
-  age: string;
-  role: string;
-  personality: string[];
-  generatedDescription: string;
-  imageUrl: string;
-}>> {
+export async function createCharacter(params: { name: string; description: string }): Promise<ApiResponse<{ imageUrl: string }>> {
   try {
-    const response = await fetch('/api/characters', {
+    const response = await fetch('/api/character', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,13 +63,19 @@ export async function createCharacter(params: CreateCharacterParams): Promise<Ap
       body: JSON.stringify(params),
     });
 
+    if (!response.ok) {
+      throw new Error('角色创建失败');
+    }
+
     const data = await response.json();
-    return data;
+    return {
+      success: true,
+      data,
+    };
   } catch (error) {
-    console.error('创建角色请求失败:', error);
     return {
       success: false,
-      message: '创建角色请求失败，请重试',
+      message: error instanceof Error ? error.message : '角色创建失败',
     };
   }
 }

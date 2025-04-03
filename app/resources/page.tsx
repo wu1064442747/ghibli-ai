@@ -3,121 +3,111 @@
 import React from 'react';
 import Image from 'next/image';
 
-const resources = [
-  {
-    title: '天空之城',
-    description: '一个漂浮在空中的神秘城市，充满了科技与魔法的元素。',
-    category: '电影',
-    year: '1986',
-    imageUrl: '/castle.jpg',
-  },
-  {
-    title: '龙猫',
-    description: '可爱的森林精灵与小女孩的奇幻冒险故事。',
-    category: '电影',
-    year: '1988',
-    imageUrl: '/totoro.jpg',
-  },
-  {
-    title: '千与千寻',
-    description: '少女千寻在神秘世界的奇幻冒险。',
-    category: '电影',
-    year: '2001',
-    imageUrl: '/spirited.jpg',
-  },
-];
-
-const tutorials = [
-  {
-    title: '吉卜力风格基础',
-    description: '学习吉卜力动画特有的绘画技巧和风格要素。',
-    duration: '30分钟',
-    level: '入门',
-  },
-  {
-    title: '角色设计技巧',
-    description: '如何创造富有个性和魅力的吉卜力风格角色。',
-    duration: '45分钟',
-    level: '中级',
-  },
-  {
-    title: '场景构建详解',
-    description: '打造充满魔法和想象力的吉卜力场景。',
-    duration: '60分钟',
-    level: '进阶',
-  },
-];
-
 export default function ResourcesPage() {
+  const classicWorks = [
+    {
+      id: 1,
+      title: '千与千寻',
+      description: '一个少女在神秘世界中寻找自我的成长故事。',
+      imageUrl: '/images/spirited-away.jpg',
+      year: '2001',
+    },
+    {
+      id: 2,
+      title: '龙猫',
+      description: '两姐妹与森林精灵的奇妙冒险。',
+      imageUrl: '/images/totoro.jpg',
+      year: '1988',
+    },
+    {
+      id: 3,
+      title: '哈尔的移动城堡',
+      description: '一个关于爱、魔法和战争的浪漫故事。',
+      imageUrl: '/images/howls-moving-castle.jpg',
+      year: '2004',
+    },
+  ];
+
+  const tutorials = [
+    {
+      id: 1,
+      title: '吉卜力风格绘画基础',
+      description: '学习宫崎骏动画中的基本绘画技巧。',
+      difficulty: '入门',
+      duration: '2小时',
+    },
+    {
+      id: 2,
+      title: '角色设计进阶',
+      description: '深入探讨吉卜力角色的设计原则。',
+      difficulty: '中级',
+      duration: '3小时',
+    },
+    {
+      id: 3,
+      title: '场景构建大师班',
+      description: '掌握吉卜力风格场景的创作方法。',
+      difficulty: '高级',
+      duration: '4小时',
+    },
+  ];
+
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-b from-slate-900 to-slate-800">
-      <div className="max-w-6xl mx-auto">
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">资源中心</h1>
-          <p className="text-slate-300">探索吉卜力的艺术世界，获取创作灵感和学习资源。</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">资源中心</h1>
+          <p className="text-gray-600">探索吉卜力的经典作品和学习资源。</p>
         </div>
 
-        <div className="mb-16">
-          <h2 className="text-2xl font-bold text-white mb-8">经典作品</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {resources.map((resource) => (
-              <div
-                key={resource.title}
-                className="bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden shadow-xl group"
-              >
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">经典作品</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {classicWorks.map((work) => (
+              <div key={work.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div className="aspect-video relative">
-                  <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/0 transition" />
-                  <Image
-                    src={resource.imageUrl}
-                    alt={resource.title}
-                    fill
-                    className="object-cover transition group-hover:scale-105"
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={work.imageUrl}
+                    alt={work.title}
+                    className="w-full h-full object-cover"
                   />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-2">{resource.title}</h3>
-                  <p className="text-slate-300 mb-4">{resource.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="px-3 py-1 bg-slate-700/50 text-slate-300 text-sm rounded-full">
-                      {resource.year}
-                    </span>
-                    <button className="text-blue-400 hover:text-blue-300 transition">
-                      电影详情
-                    </button>
+                  <div className="absolute top-2 right-2 px-2 py-1 bg-black/60 text-white text-sm rounded">
+                    {work.year}
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-8">创作教程</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {tutorials.map((tutorial) => (
-              <div
-                key={tutorial.title}
-                className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 shadow-xl hover:shadow-2xl transition"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium
-                    ${tutorial.level === '入门' ? 'bg-green-500/20 text-green-400' :
-                      tutorial.level === '中级' ? 'bg-yellow-500/20 text-yellow-400' :
-                      'bg-red-500/20 text-red-400'}`}
-                  >
-                    {tutorial.level}
-                  </span>
-                  <span className="text-slate-400 text-sm">{tutorial.duration}</span>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{work.title}</h3>
+                  <p className="text-gray-600">{work.description}</p>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">{tutorial.title}</h3>
-                <p className="text-slate-300 mb-4">{tutorial.description}</p>
-                <button className="w-full px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-medium rounded-lg transition">
-                  开始学习
-                </button>
               </div>
             ))}
           </div>
-        </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">教程资源</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tutorials.map((tutorial) => (
+              <div key={tutorial.id} className="bg-white rounded-xl p-6 shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <span className={`px-3 py-1 text-sm rounded-full ${
+                    tutorial.difficulty === '入门'
+                      ? 'bg-green-100 text-green-800'
+                      : tutorial.difficulty === '中级'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-red-100 text-red-800'
+                  }`}>
+                    {tutorial.difficulty}
+                  </span>
+                  <span className="text-sm text-gray-500">{tutorial.duration}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{tutorial.title}</h3>
+                <p className="text-gray-600">{tutorial.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

@@ -10,26 +10,26 @@ export default function GeneratePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await generateImage(prompt, style);
+    await generateImage({ prompt, style });
     setPrompt('');
   };
 
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-b from-slate-900 to-slate-800">
+    <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">生成吉卜力风格图片</h1>
-          <p className="text-slate-300">探索吉卜力的艺术世界，创造属于你的魔法时刻。</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">生成吉卜力风格图片</h1>
+          <p className="text-gray-600">探索吉卜力的艺术世界，创造属于你的魔法时刻。</p>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 shadow-xl mb-8">
+        <div className="bg-white rounded-xl p-6 shadow-lg mb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="描述你想要生成的图片场景，例如：一个宫崎骏风格的温馨小镇，有红色的屋顶和蜿蜒的小路，远处是连绵的山脉..."
-                className="w-full h-32 px-4 py-3 rounded-lg bg-slate-700/50 text-white placeholder-slate-400 border border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                className="w-full h-32 px-4 py-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               />
             </div>
 
@@ -37,7 +37,7 @@ export default function GeneratePage() {
               <select
                 value={style}
                 onChange={(e) => setStyle(e.target.value)}
-                className="px-4 py-2 rounded-lg bg-slate-700/50 text-white border border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                className="px-4 py-2 rounded-lg bg-gray-50 text-gray-900 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               >
                 <option value="ghibli">吉卜力风格</option>
                 <option value="anime">动漫风格</option>
@@ -47,7 +47,7 @@ export default function GeneratePage() {
               <button
                 type="submit"
                 disabled={isGenerating || !prompt}
-                className="flex-1 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition"
+                className="flex-1 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition"
               >
                 {isGenerating ? '生成中...' : '生成图片'}
               </button>
@@ -56,11 +56,11 @@ export default function GeneratePage() {
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-white mb-6">生成的图片</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">生成的图片</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {generatedImages.map((image, index) => (
               <div key={image.id || index} className="relative group">
-                <div className="aspect-square overflow-hidden rounded-xl bg-slate-800/50 backdrop-blur-sm shadow-xl">
+                <div className="aspect-square overflow-hidden rounded-xl bg-white shadow-lg">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={image.imageUrl}

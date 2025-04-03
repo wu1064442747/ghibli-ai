@@ -2,143 +2,106 @@
 
 import React, { useState } from 'react';
 
-const promptCategories = [
-  {
-    name: '场景',
-    prompts: [
-      {
-        title: '魔法森林',
-        content: '一片神秘的森林，巨大的树木间点缀着发光的蘑菇和萤火虫，远处有一座古老的树屋',
-        tags: ['自然', '魔法', '夜晚'],
-      },
-      {
-        title: '童话小镇',
-        content: '一个充满魔法的小镇，有着红色的屋顶和蜿蜒的小路，远处是连绵的山脉，吉卜力风格',
-        tags: ['风景', '建筑', '自然'],
-      },
-      {
-        title: '海边港口',
-        content: '阳光明媚的海港，帆船停靠在码头，海鸥在蓝天中翱翔，吉卜力风格',
-        tags: ['海洋', '建筑', '交通'],
-      },
-    ],
-  },
-  {
-    name: '角色',
-    prompts: [
-      {
-        title: '森林守护者',
-        content: '一位年轻的森林守护者，穿着绿色长袍，手持魔法木杖，头戴树叶编织的王冠',
-        tags: ['人物', '魔法', '自然'],
-      },
-      {
-        title: '机械师少女',
-        content: '一位戴着护目镜的少女机械师，身穿工装背带裤，周围是各种齿轮和工具',
-        tags: ['人物', '科技', '工作'],
-      },
-    ],
-  },
-  {
-    name: '物品',
-    prompts: [
-      {
-        title: '魔法书',
-        content: '一本古老的魔法书，封面上有神秘符文，书页边缘泛着金色光芒',
-        tags: ['道具', '魔法', '神秘'],
-      },
-      {
-        title: '飞行器',
-        content: '一台复古风格的飞行器，结合了木制和金属材质，有着优雅的线条设计',
-        tags: ['交通', '科技', '复古'],
-      },
-    ],
-  },
-];
-
 export default function PromptsPage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('场景');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('全部');
 
-  const filteredPrompts = promptCategories
-    .find((category) => category.name === selectedCategory)
-    ?.prompts.filter((prompt) =>
-      prompt.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      prompt.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      prompt.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    ) || [];
+  const categories = ['全部', '场景', '角色', '氛围', '风格'];
+
+  const prompts = [
+    {
+      id: 1,
+      title: '宫崎骏风格的乡村小镇',
+      description: '一个宁静的小镇，有红色的屋顶和蜿蜒的小路，远处是连绵的山脉，天空中飘着蓬松的白云。',
+      category: '场景',
+      tags: ['乡村', '自然', '建筑'],
+    },
+    {
+      id: 2,
+      title: '神秘的森林精灵',
+      description: '一个可爱的森林精灵，有着大大的眼睛和毛茸茸的身体，散发着柔和的光芒。',
+      category: '角色',
+      tags: ['精灵', '可爱', '魔法'],
+    },
+    {
+      id: 3,
+      title: '雨天的魔法咖啡馆',
+      description: '一个温馨的咖啡馆，窗外下着小雨，室内有温暖的灯光和悬浮的魔法物品。',
+      category: '场景',
+      tags: ['室内', '雨天', '魔法'],
+    },
+  ];
+
+  const filteredPrompts = prompts.filter((prompt) => {
+    const matchesCategory = selectedCategory === '全部' || prompt.category === selectedCategory;
+    const matchesSearch = prompt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prompt.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-b from-slate-900 to-slate-800">
+    <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">提示词库</h1>
-          <p className="text-slate-300">精选的吉卜力风格提示词，帮助你创作出更好的作品。</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">提示词库</h1>
+          <p className="text-gray-600">探索精心设计的提示词，创造独特的吉卜力风格作品。</p>
         </div>
 
-        <div className="mb-8">
-          <div className="relative">
+        <div className="bg-white rounded-xl p-6 shadow-lg mb-8">
+          <div className="flex flex-col md:flex-row gap-4">
             <input
               type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="搜索提示词..."
-              className="w-full px-4 py-3 pl-10 rounded-lg bg-slate-800/50 text-white placeholder-slate-400 border border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              className="flex-1 px-4 py-2 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
             />
-            <svg
-              className="absolute left-3 top-3.5 h-5 w-5 text-slate-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
-
-          <div className="flex gap-2 mt-4">
-            {promptCategories.map((category) => (
-              <button
-                key={category.name}
-                onClick={() => setSelectedCategory(category.name)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  selectedCategory === category.name
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
-                }`}
-              >
-                {category.name}
-              </button>
-            ))}
+            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition ${
+                    selectedCategory === category
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 gap-6">
           {filteredPrompts.map((prompt) => (
-            <div
-              key={prompt.title}
-              className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 shadow-xl hover:shadow-2xl transition group"
-            >
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition">
-                {prompt.title}
-              </h3>
-              <p className="text-slate-300 mb-4">{prompt.content}</p>
-              <div className="flex flex-wrap gap-2">
-                {prompt.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 bg-slate-700/50 text-slate-300 text-sm rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
+            <div key={prompt.id} className="bg-white rounded-xl p-6 shadow-lg">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{prompt.title}</h3>
+                  <p className="text-gray-600 mb-4">{prompt.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {prompt.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition"
+                  onClick={() => {
+                    // 复制提示词到剪贴板
+                    navigator.clipboard.writeText(prompt.description);
+                  }}
+                >
+                  复制
+                </button>
               </div>
-              <button className="mt-4 w-full px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 font-medium rounded-lg transition">
-                复制提示词
-              </button>
             </div>
           ))}
         </div>
