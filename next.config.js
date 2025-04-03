@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: 'export',
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -11,6 +11,7 @@ const nextConfig = {
     ],
   },
   distDir: '.next',
+  trailingSlash: true,
 };
 
 module.exports = nextConfig;
