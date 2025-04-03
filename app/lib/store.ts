@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { GeneratedImage, Character, Prompt } from '@/types';
+import { generateImage as apiGenerateImage } from './api';
 
 // 图片生成状态
 interface GenerateState {
@@ -17,7 +18,8 @@ interface GenerateState {
   setPrompt: (prompt: string) => void;
   setStyle: (style: string) => void;
   setIsGenerating: (isGenerating: boolean) => void;
-  addGeneratedImage: (imageUrl: string) => void;
+  generateImage: (prompt: string, style: string) => Promise<void>;
+  addGeneratedImage: (image: Partial<GeneratedImage>) => void;
   clearGeneratedImages: () => void;
   toggleFavorite: (imageUrl: string) => void;
   updateGenerationParams: (params: Partial<GenerateState['generationParams']>) => void;
@@ -81,16 +83,38 @@ export const useGenerateStore = create<GenerateState>((set, get) => ({
   setPrompt: (prompt) => set({ prompt }),
   setStyle: (style) => set({ style }),
   setIsGenerating: (isGenerating) => set({ isGenerating }),
-  addGeneratedImage: (imageUrl) =>
+  generateImage: async (prompt, style) => {
+    set({ isGenerating: true });
+    try {
+      const result = await apiGenerateImage({ prompt, style });
+      if (result.success && result.data) {
+        set((state) => ({
+          generatedImages: [
+            {
+              id: Date.now().toString(),
+              imageUrl: result.data.imageUrl,
+              prompt,
+              style,
+              timestamp: new Date().toISOString(),
+            },
+            ...state.generatedImages,
+          ],
+        }));
+      }
+    } catch (error) {
+      console.error('图片生成错误:', error);
+    } finally {
+      set({ isGenerating: false });
+    }
+  },
+  addGeneratedImage: (image) =>
     set((state) => ({
       generatedImages: [
         {
-          id: Date.now().toString(),
-          imageUrl,
-          prompt: state.prompt,
-          style: state.style,
-          timestamp: new Date().toISOString(),
-        },
+          ...image,
+          id: image.id || Date.now().toString(),
+          timestamp: image.timestamp || new Date().toISOString(),
+        } as GeneratedImage,
         ...state.generatedImages,
       ],
     })),

@@ -1,19 +1,24 @@
 import { GenerateImageParams, CreateCharacterParams, ApiResponse, ShareParams } from '@/types';
 
 export async function generateImage(params: GenerateImageParams): Promise<ApiResponse<{ imageUrl: string }>> {
-  const response = await fetch('/api/generate', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(params),
-  });
+  try {
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
 
-  if (!response.ok) {
-    throw new Error('图片生成失败');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('生成图片请求失败:', error);
+    return {
+      success: false,
+      message: '生成图片请求失败，请重试',
+    };
   }
-
-  return response.json();
 }
 
 export async function generateBatchImages(params: {
@@ -45,19 +50,24 @@ export async function createCharacter(params: CreateCharacterParams): Promise<Ap
   generatedDescription: string;
   imageUrl: string;
 }>> {
-  const response = await fetch('/api/characters', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(params),
-  });
+  try {
+    const response = await fetch('/api/characters', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
 
-  if (!response.ok) {
-    throw new Error('角色创建失败');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('创建角色请求失败:', error);
+    return {
+      success: false,
+      message: '创建角色请求失败，请重试',
+    };
   }
-
-  return response.json();
 }
 
 export async function shareContent(params: ShareParams): Promise<ApiResponse<{
