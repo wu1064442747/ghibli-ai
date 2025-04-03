@@ -1,23 +1,31 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import { useCharacterStore } from '@/lib/store';
 import { createCharacter } from '@/lib/api';
-import type { Character } from '@/types';
 
 export default function CharactersPage() {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [age, setAge] = useState('');
-  const [role, setRole] = useState('');
-  const [personality, setPersonality] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [character, setCharacter] = useState<Character | null>(null);
+  const {
+    name,
+    description,
+    age,
+    role,
+    personality,
+    isCreating,
+    createdCharacters,
+    setName,
+    setDescription,
+    setAge,
+    setRole,
+    addPersonality,
+    removePersonality,
+    setIsCreating,
+    addCreatedCharacter,
+  } = useCharacterStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
+    setIsCreating(true);
 
     try {
       const result = await createCharacter({
@@ -25,18 +33,21 @@ export default function CharactersPage() {
         description,
         age,
         role,
-        personality
+        personality,
       });
 
       if (result.success && result.data) {
-        setCharacter(result.data);
-      } else {
-        setError(result.message || '创建失败，请重试');
+        addCreatedCharacter(result.data);
+        setName('');
+        setDescription('');
+        setAge('少年');
+        setRole('主角');
+        personality.forEach(trait => removePersonality(trait));
       }
-    } catch (err) {
-      setError('创建过程中发生错误，请重试');
+    } catch (error) {
+      console.error('角色创建错误:', error);
     } finally {
-      setLoading(false);
+      setIsCreating(false);
     }
   };
 
@@ -47,12 +58,9 @@ export default function CharactersPage() {
       <div className="max-w-2xl mx-auto">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              角色名称
-            </label>
+            <label className="block text-sm font-medium text-gray-700">角色名称</label>
             <input
               type="text"
-              id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -61,96 +69,115 @@ export default function CharactersPage() {
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-              角色描述
-            </label>
+            <label className="block text-sm font-medium text-gray-700">角色描述</label>
             <textarea
-              id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              rows={4}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              rows={4}
               required
             />
           </div>
 
-          <div>
-            <label htmlFor="age" className="block text-sm font-medium text-gray-700">
-              年龄
-            </label>
-            <input
-              type="text"
-              id="age"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
-          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">年龄段</label>
+              <select
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="少年">少年</option>
+                <option value="青年">青年</option>
+                <option value="中年">中年</option>
+                <option value="老年">老年</option>
+              </select>
+            </div>
 
-          <div>
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-              角色身份
-            </label>
-            <input
-              type="text"
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="personality" className="block text-sm font-medium text-gray-700">
-              性格特征
-            </label>
-            <textarea
-              id="personality"
-              value={personality}
-              onChange={(e) => setPersonality(e.target.value)}
-              rows={3}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400"
-            >
-              {loading ? '创建中...' : '创建角色'}
-            </button>
-          </div>
-        </form>
-
-        {error && (
-          <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-            {error}
-          </div>
-        )}
-
-        {character && (
-          <div className="mt-8 p-6 bg-white rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4">{character.name}</h2>
-            {character.imageUrl && (
-              <img
-                src={character.imageUrl}
-                alt={character.name}
-                className="w-full h-auto mb-4 rounded"
-              />
-            )}
-            <div className="space-y-2">
-              <p><strong>描述：</strong>{character.description}</p>
-              <p><strong>年龄：</strong>{character.age}</p>
-              <p><strong>身份：</strong>{character.role}</p>
-              <p><strong>性格：</strong>{character.personality}</p>
-              {character.generatedDescription && (
-                <p><strong>AI生成描述：</strong>{character.generatedDescription}</p>
-              )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">角色定位</label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="主角">主角</option>
+                <option value="配角">配角</option>
+                <option value="反派">反派</option>
+                <option value="导师">导师</option>
+              </select>
             </div>
           </div>
-        )}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">性格特征</label>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {['勇敢', '善良', '智慧', '坚强', '活泼', '神秘', '温柔', '正义'].map((trait) => (
+                <button
+                  key={trait}
+                  type="button"
+                  onClick={() =>
+                    personality.includes(trait)
+                      ? removePersonality(trait)
+                      : addPersonality(trait)
+                  }
+                  className={`px-3 py-1 rounded-full text-sm ${
+                    personality.includes(trait)
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  {trait}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isCreating}
+            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          >
+            {isCreating ? '创建中...' : '创建角色'}
+          </button>
+        </form>
+
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-6">已创建的角色</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {createdCharacters.map((character, index) => (
+              <div
+                key={index}
+                className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+              >
+                {character.imageUrl && (
+                  <div className="mb-4 relative h-48 rounded-lg overflow-hidden">
+                    <img
+                      src={character.imageUrl}
+                      alt={character.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <h3 className="text-lg font-semibold">{character.name}</h3>
+                <p className="text-gray-600 text-sm mt-1">
+                  {character.age} · {character.role}
+                </p>
+                <p className="text-gray-700 mt-2">{character.description}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {character.personality.map((trait, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
+                    >
+                      {trait}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

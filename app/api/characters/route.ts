@@ -5,36 +5,38 @@ import { generateImageWithStability } from '@/lib/stability';
 
 export async function POST(request: Request) {
   try {
-    const characterParams = await request.json() as CreateCharacterParams;
+    const data: CreateCharacterParams = await request.json();
+    const { name, description, age, role, personality } = data;
 
-    // 调用 OpenAI API 生成角色描述
-    const generatedDescription = await generateCharacterWithOpenAI(characterParams);
-
-    // 调用 Stability AI API 生成角色图片
-    const base64Image = await generateImageWithStability({
-      prompt: `A detailed portrait of ${characterParams.name}, ${characterParams.description}`,
-      style: 'ghibli'
+    // 使用 OpenAI 生成角色详细描述
+    const generatedDescription = await generateCharacterWithOpenAI({
+      name,
+      description,
+      age,
+      role,
+      personality,
     });
 
-    // 将 base64 图片转换为可访问的 URL
-    const imageUrl = `data:image/png;base64,${base64Image}`;
+    // 使用 Stability AI 生成角色图片
+    const imagePrompt = `A ${age} ${role} character in Ghibli style, ${description}, ${personality.join(', ')}`;
+    const imageUrl = await generateImageWithStability(imagePrompt);
 
+    // 返回生成的角色信息
     return NextResponse.json({
       success: true,
       data: {
-        ...characterParams,
-        generatedDescription,
-        imageUrl
+        name,
+        description: generatedDescription,
+        age,
+        role,
+        personality,
+        imageUrl,
       },
-      message: '角色创建成功'
     });
   } catch (error) {
-    console.error('Error in characters route:', error);
+    console.error('角色创建错误:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        message: error instanceof Error ? error.message : '角色创建失败'
-      },
+      { success: false, message: '角色创建失败，请重试' },
       { status: 500 }
     );
   }
