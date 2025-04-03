@@ -9,7 +9,8 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-  }
+  },
+  distDir: '.next'
 }
 
 module.exports = nextConfig

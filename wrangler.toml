@@ -3,7 +3,14 @@ compatibility_date = "2024-01-01"
 
 [build]
 command = "npm run build"
-output_dir = ".next"
+
+[build.production]
+pages_build_output_dir = ".next/standalone"
+
+[[build.production.d1_databases]]
+binding = "DB"
+database_name = "ghibli-ai-db"
+database_id = "ghibli-ai-production"
 
 [env.production]
 routes = [
