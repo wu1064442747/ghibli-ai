@@ -1,14 +1,20 @@
 import { NextResponse } from 'next/server';
-import { GenerateImageParams } from '@/types';
 import { generateImageWithStability } from '@/lib/stability';
+
+interface BatchGenerateRequest {
+  prompts: string[];
+  style: string;
+  generationParams?: {
+    cfg_scale?: number;
+    steps?: number;
+    width?: number;
+    height?: number;
+  };
+}
 
 export async function POST(request: Request) {
   try {
-    const { prompts, style, generationParams } = await request.json() as {
-      prompts: string[];
-      style: string;
-      generationParams?: GenerateImageParams['generationParams'];
-    };
+    const { prompts, style, generationParams } = await request.json() as BatchGenerateRequest;
 
     // 并行生成多张图片
     const imagePromises = prompts.map((prompt) =>

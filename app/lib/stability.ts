@@ -1,15 +1,12 @@
-import { GenerateImageParams } from '@/types';
-
-const STABILITY_API_KEY = process.env.STABLE_DIFFUSION_API_KEY;
-const STABILITY_API_ENDPOINT = process.env.STABILITY_API_ENDPOINT;
-
 interface GenerateImageParams {
   prompt: string;
   style?: string;
-  cfg_scale?: number;
-  steps?: number;
-  width?: number;
-  height?: number;
+  generationParams?: {
+    cfg_scale?: number;
+    steps?: number;
+    width?: number;
+    height?: number;
+  };
 }
 
 // 生成图片的提示词模板
@@ -26,10 +23,12 @@ const getGhibliPrompt = (prompt: string) => {
 export async function generateImageWithStability({
   prompt,
   style = 'ghibli',
-  cfg_scale = 7,
-  steps = 30,
-  width = 1024,
-  height = 1024,
+  generationParams = {
+    cfg_scale: 7,
+    steps: 30,
+    width: 1024,
+    height: 1024,
+  },
 }: GenerateImageParams): Promise<string> {
   const apiKey = process.env.STABILITY_API_KEY;
   if (!apiKey) {
@@ -55,10 +54,7 @@ export async function generateImageWithStability({
             weight: 1,
           },
         ],
-        cfg_scale,
-        steps,
-        width,
-        height,
+        ...generationParams,
       }),
     }
   );
@@ -69,5 +65,5 @@ export async function generateImageWithStability({
 
   const result = await response.json();
   const base64Image = result.artifacts[0].base64;
-  return `data:image/png;base64,${base64Image}`;
+  return base64Image; // 不再添加 data:image/png;base64, 前缀，由调用方处理
 } 
