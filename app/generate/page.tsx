@@ -18,8 +18,8 @@ export default function GeneratePage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">生成吉卜力风格图片</h1>
-          <p className="text-gray-600">探索吉卜力的艺术世界，创造属于你的魔法时刻。</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Generate Ghibli-Style Images</h1>
+          <p className="text-gray-600">Explore the artistic world of Ghibli, create your own magical moments.</p>
         </div>
 
         <div className="bg-white rounded-xl p-6 shadow-lg mb-8">
@@ -28,7 +28,7 @@ export default function GeneratePage() {
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="描述你想要生成的图片场景，例如：一个宫崎骏风格的温馨小镇，有红色的屋顶和蜿蜒的小路，远处是连绵的山脉..."
+                placeholder="Describe the scene you want to generate, for example: A cozy Miyazaki-style town with red roofs and winding paths, with mountains in the distance..."
                 className="w-full h-32 px-4 py-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               />
             </div>
@@ -39,9 +39,9 @@ export default function GeneratePage() {
                 onChange={(e) => setStyle(e.target.value)}
                 className="px-4 py-2 rounded-lg bg-gray-50 text-gray-900 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               >
-                <option value="ghibli">吉卜力风格</option>
-                <option value="anime">动漫风格</option>
-                <option value="watercolor">水彩风格</option>
+                <option value="ghibli">Ghibli Style</option>
+                <option value="anime">Anime Style</option>
+                <option value="watercolor">Watercolor Style</option>
               </select>
 
               <button
@@ -49,14 +49,14 @@ export default function GeneratePage() {
                 disabled={isGenerating || !prompt}
                 className="flex-1 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition"
               >
-                {isGenerating ? '生成中...' : '生成图片'}
+                {isGenerating ? 'Generating...' : 'Generate Image'}
               </button>
             </div>
           </form>
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">生成的图片</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Generated Images</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {generatedImages.map((image, index) => (
               <div key={image.id || index} className="relative group">

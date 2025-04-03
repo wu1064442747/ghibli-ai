@@ -19,8 +19,8 @@ export default function CharacterPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">创建吉卜力风格角色</h1>
-          <p className="text-gray-600">设计独特的角色，赋予他们生命和故事。</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Create Ghibli-Style Character</h1>
+          <p className="text-gray-600">Design unique characters and bring them to life with their own stories.</p>
         </div>
 
         <div className="bg-white rounded-xl p-6 shadow-lg mb-8">
@@ -30,7 +30,7 @@ export default function CharacterPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="角色名称"
+                placeholder="Character Name"
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               />
             </div>
@@ -39,7 +39,7 @@ export default function CharacterPage() {
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="描述角色的特点、性格和背景故事..."
+                placeholder="Describe the character's traits, personality, and backstory..."
                 className="w-full h-32 px-4 py-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               />
             </div>
@@ -49,13 +49,13 @@ export default function CharacterPage() {
               disabled={isCreating || !name || !description}
               className="w-full px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition"
             >
-              {isCreating ? '创建中...' : '创建角色'}
+              {isCreating ? 'Creating...' : 'Create Character'}
             </button>
           </form>
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">已创建的角色</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Created Characters</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {characters.map((character, index) => (
               <div key={character.id || index} className="bg-white rounded-xl p-6 shadow-lg">

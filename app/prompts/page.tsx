@@ -4,36 +4,36 @@ import React, { useState } from 'react';
 
 export default function PromptsPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('全部');
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
-  const categories = ['全部', '场景', '角色', '氛围', '风格'];
+  const categories = ['All', 'Scene', 'Character', 'Atmosphere', 'Style'];
 
   const prompts = [
     {
       id: 1,
-      title: '宫崎骏风格的乡村小镇',
-      description: '一个宁静的小镇，有红色的屋顶和蜿蜒的小路，远处是连绵的山脉，天空中飘着蓬松的白云。',
-      category: '场景',
-      tags: ['乡村', '自然', '建筑'],
+      title: 'Miyazaki-Style Country Town',
+      description: 'A peaceful town with red roofs and winding paths, distant mountains, and fluffy white clouds in the sky.',
+      category: 'Scene',
+      tags: ['Countryside', 'Nature', 'Architecture'],
     },
     {
       id: 2,
-      title: '神秘的森林精灵',
-      description: '一个可爱的森林精灵，有着大大的眼睛和毛茸茸的身体，散发着柔和的光芒。',
-      category: '角色',
-      tags: ['精灵', '可爱', '魔法'],
+      title: 'Mysterious Forest Spirit',
+      description: 'A cute forest spirit with big eyes and a fluffy body, emitting a soft glow.',
+      category: 'Character',
+      tags: ['Spirit', 'Cute', 'Magic'],
     },
     {
       id: 3,
-      title: '雨天的魔法咖啡馆',
-      description: '一个温馨的咖啡馆，窗外下着小雨，室内有温暖的灯光和悬浮的魔法物品。',
-      category: '场景',
-      tags: ['室内', '雨天', '魔法'],
+      title: 'Magical Cafe on a Rainy Day',
+      description: 'A cozy cafe with rain outside, warm lighting inside, and floating magical items.',
+      category: 'Scene',
+      tags: ['Interior', 'Rain', 'Magic'],
     },
   ];
 
   const filteredPrompts = prompts.filter((prompt) => {
-    const matchesCategory = selectedCategory === '全部' || prompt.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'All' || prompt.category === selectedCategory;
     const matchesSearch = prompt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prompt.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
@@ -43,8 +43,8 @@ export default function PromptsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">提示词库</h1>
-          <p className="text-gray-600">探索精心设计的提示词，创造独特的吉卜力风格作品。</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Prompt Library</h1>
+          <p className="text-gray-600">Explore carefully crafted prompts to create unique Ghibli-style works.</p>
         </div>
 
         <div className="bg-white rounded-xl p-6 shadow-lg mb-8">
@@ -53,7 +53,7 @@ export default function PromptsPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="搜索提示词..."
+              placeholder="Search prompts..."
               className="flex-1 px-4 py-2 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
             />
             <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
@@ -74,7 +74,7 @@ export default function PromptsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
+        <div className="space-y-4">
           {filteredPrompts.map((prompt) => (
             <div key={prompt.id} className="bg-white rounded-xl p-6 shadow-lg">
               <div className="flex items-start justify-between mb-4">
@@ -95,11 +95,10 @@ export default function PromptsPage() {
                 <button
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition"
                   onClick={() => {
-                    // 复制提示词到剪贴板
                     navigator.clipboard.writeText(prompt.description);
                   }}
                 >
-                  复制
+                  Copy
                 </button>
               </div>
             </div>

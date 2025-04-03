@@ -25,7 +25,7 @@ export default function Navbar() {
                   : 'text-gray-600 hover:text-blue-600'
               } px-3 py-2 text-sm font-medium transition-colors duration-200`}
             >
-              生成图片
+              Generate Image
             </Link>
             <Link
               href="/characters"
@@ -35,7 +35,7 @@ export default function Navbar() {
                   : 'text-gray-600 hover:text-blue-600'
               } px-3 py-2 text-sm font-medium transition-colors duration-200`}
             >
-              角色创建
+              Create Character
             </Link>
             <Link
               href="/resources"
@@ -45,7 +45,7 @@ export default function Navbar() {
                   : 'text-gray-600 hover:text-blue-600'
               } px-3 py-2 text-sm font-medium transition-colors duration-200`}
             >
-              资源中心
+              Resources
             </Link>
             <Link
               href="/prompts"
@@ -55,7 +55,7 @@ export default function Navbar() {
                   : 'text-gray-600 hover:text-blue-600'
               } px-3 py-2 text-sm font-medium transition-colors duration-200`}
             >
-              提示词库
+              Prompts
             </Link>
           </div>
 
