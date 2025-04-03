@@ -1,12 +1,6 @@
 import { GenerateImageParams, CreateCharacterParams, ApiResponse, ShareParams } from '@/types';
 
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-}
-
-export async function generateImage(params: { prompt: string; style: string }): Promise<ApiResponse<{ imageUrl: string }>> {
+export async function generateImage(params: GenerateImageParams): Promise<ApiResponse<{ imageUrl: string }>> {
   try {
     const response = await fetch('/api/generate', {
       method: 'POST',
@@ -16,19 +10,12 @@ export async function generateImage(params: { prompt: string; style: string }): 
       body: JSON.stringify(params),
     });
 
-    if (!response.ok) {
-      throw new Error('图片生成失败');
-    }
-
     const data = await response.json();
-    return {
-      success: true,
-      data,
-    };
+    return data;
   } catch (error) {
     return {
       success: false,
-      message: error instanceof Error ? error.message : '图片生成失败',
+      message: error instanceof Error ? error.message : '生成图片失败',
     };
   }
 }
@@ -53,9 +40,9 @@ export async function generateBatchImages(params: {
   return response.json();
 }
 
-export async function createCharacter(params: { name: string; description: string }): Promise<ApiResponse<{ imageUrl: string }>> {
+export async function createCharacter(params: CreateCharacterParams): Promise<ApiResponse<{ imageUrl: string }>> {
   try {
-    const response = await fetch('/api/character', {
+    const response = await fetch('/api/characters', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -63,43 +50,32 @@ export async function createCharacter(params: { name: string; description: strin
       body: JSON.stringify(params),
     });
 
-    if (!response.ok) {
-      throw new Error('角色创建失败');
-    }
-
     const data = await response.json();
-    return {
-      success: true,
-      data,
-    };
+    return data;
   } catch (error) {
     return {
       success: false,
-      message: error instanceof Error ? error.message : '角色创建失败',
+      message: error instanceof Error ? error.message : '创建角色失败',
     };
   }
 }
 
-export async function shareContent(params: ShareParams): Promise<ApiResponse<{
-  type: string;
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  shareUrl: string;
-  timestamp: string;
-}>> {
-  const response = await fetch('/api/share', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(params),
-  });
+export async function share(params: ShareParams): Promise<ApiResponse<{ shareUrl: string }>> {
+  try {
+    const response = await fetch('/api/share', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
 
-  if (!response.ok) {
-    throw new Error('分享失败');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : '分享失败',
+    };
   }
-
-  return response.json();
 } 
