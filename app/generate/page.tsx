@@ -2,101 +2,76 @@
 
 import React, { useState } from 'react';
 import { useGenerateStore } from '@/lib/store';
-import { generateImage } from '@/lib/api';
 
 export default function GeneratePage() {
-  const {
-    prompt,
-    style,
-    isGenerating,
-    generatedImages,
-    setPrompt,
-    setStyle,
-    setIsGenerating,
-    addGeneratedImage,
-  } = useGenerateStore();
+  const [prompt, setPrompt] = useState('');
+  const [style, setStyle] = useState('ghibli');
+  const { isGenerating, generatedImages, generateImage } = useGenerateStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsGenerating(true);
-
-    try {
-      const result = await generateImage({ prompt, style });
-
-      if (result.success && result.data) {
-        addGeneratedImage(result.data.imageUrl);
-        setPrompt('');
-      }
-    } catch (error) {
-      console.error('图片生成错误:', error);
-    } finally {
-      setIsGenerating(false);
-    }
+    await generateImage(prompt, style);
+    setPrompt('');
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">生成吉卜力风格图片</h1>
+    <div className="min-h-screen p-8 bg-gradient-to-b from-slate-900 to-slate-800">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-white mb-4">生成吉卜力风格图片</h1>
+          <p className="text-slate-300">探索吉卜力的艺术世界，创造属于你的魔法时刻。</p>
+        </div>
 
-      <div className="max-w-2xl mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">图片描述</label>
-            <textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              rows={4}
-              placeholder="描述你想要生成的图片场景，例如：一个宫崎骏风格的森林小屋，阳光透过树叶，有小动物在门前玩耍..."
-              required
-            />
-          </div>
+        <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 shadow-xl mb-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="描述你想要生成的图片场景，例如：一个宫崎骏风格的温馨小镇，有红色的屋顶和蜿蜒的小路，远处是连绵的山脉..."
+                className="w-full h-32 px-4 py-3 rounded-lg bg-slate-700/50 text-white placeholder-slate-400 border border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">风格选择</label>
-            <select
-              value={style}
-              onChange={(e) => setStyle(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            >
-              <option value="ghibli">吉卜力风格</option>
-              <option value="watercolor">水彩画风格</option>
-              <option value="anime">动漫风格</option>
-            </select>
-          </div>
+            <div className="flex gap-4">
+              <select
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                className="px-4 py-2 rounded-lg bg-slate-700/50 text-white border border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              >
+                <option value="ghibli">吉卜力风格</option>
+                <option value="anime">动漫风格</option>
+                <option value="watercolor">水彩风格</option>
+              </select>
 
-          <button
-            type="submit"
-            disabled={isGenerating}
-            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-          >
-            {isGenerating ? '生成中...' : '生成图片'}
-          </button>
-        </form>
+              <button
+                type="submit"
+                disabled={isGenerating || !prompt}
+                className="flex-1 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition"
+              >
+                {isGenerating ? '生成中...' : '生成图片'}
+              </button>
+            </div>
+          </form>
+        </div>
 
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-6">生成的图片</h2>
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-white mb-6">生成的图片</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {generatedImages.map((image, index) => (
-              <div
-                key={index}
-                className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="relative h-48 rounded-lg overflow-hidden">
+              <div key={image.id || index} className="relative group">
+                <div className="aspect-square overflow-hidden rounded-xl bg-slate-800/50 backdrop-blur-sm shadow-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={image.imageUrl}
-                    alt={image.prompt}
-                    className="w-full h-full object-cover"
+                    alt={image.prompt || '生成的图片'}
+                    className="w-full h-full object-cover transition group-hover:scale-105"
                   />
                 </div>
-                <p className="mt-4 text-sm text-gray-600">{image.prompt}</p>
-                <div className="mt-2 flex justify-between items-center">
-                  <span className="text-xs text-gray-500">
-                    {new Date(image.timestamp).toLocaleString()}
-                  </span>
-                  <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                    {image.style}
-                  </span>
+                <div className="absolute inset-0 flex items-end opacity-0 group-hover:opacity-100 transition">
+                  <div className="w-full p-4 bg-gradient-to-t from-black/80 to-transparent">
+                    <p className="text-sm text-white line-clamp-2">{image.prompt}</p>
+                  </div>
                 </div>
               </div>
             ))}
