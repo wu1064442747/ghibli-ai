@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Ghibli AI - Create Ghibli-Style Art with AI',
   description: 'Create your own magical Ghibli world with AI technology',
+  other: {
+    'google-adsense-account': 'ca-pub-2231169922405054',
+  },
 }
 
 export default function RootLayout({
@@ -33,6 +36,11 @@ export default function RootLayout({
             gtag('config', 'G-Q3LSNTRHP7');
           `}
         </Script>
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2231169922405054"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`${inter.className} min-h-screen bg-[#f0f7ff]`}>
         <Navbar />
