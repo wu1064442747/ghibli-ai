@@ -26,4 +26,4 @@ export default function RootLayout({
       </body>
     </html>
   )
-} Stable Diffusion API
+}

@@ -5,17 +5,16 @@ import { generateImageWithStability } from '@/lib/stability';
 export async function POST(request: Request) {
   try {
     const data: GenerateImageParams = await request.json();
-    const { prompt, style } = data;
 
     // 使用 Stability AI 生成图片
-    const imageUrl = await generateImageWithStability(prompt);
+    const imageUrl = await generateImageWithStability(data);
 
     return NextResponse.json({
       success: true,
       data: {
         imageUrl,
-        prompt,
-        style,
+        prompt: data.prompt,
+        style: data.style,
         timestamp: new Date().toISOString(),
       },
     });

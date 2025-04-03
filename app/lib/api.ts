@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import { ApiResponse, GeneratedImage, Character } from '../types';
-
-interface GenerateImageParams {
-  prompt: string;
-  style: string;
-}
-
-interface CreateCharacterParams {
-=======
 import { GenerateImageParams, CreateCharacterParams, ApiResponse, ShareParams } from '@/types';
 
 export async function generateImage(params: GenerateImageParams): Promise<ApiResponse<{ imageUrl: string }>> {
@@ -47,54 +37,10 @@ export async function generateBatchImages(params: {
 }
 
 export async function createCharacter(params: CreateCharacterParams): Promise<ApiResponse<{
->>>>>>> 2fad80e7f1060f51d92b717b4fa501d99e9fe465
   name: string;
   description: string;
   age: string;
   role: string;
-<<<<<<< HEAD
-  personality: string;
-}
-
-export async function generateImage(params: GenerateImageParams): Promise<ApiResponse<GeneratedImage>> {
-  try {
-    const response = await fetch('/api/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(params),
-    });
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return {
-      success: false,
-      message: '生成图片时发生错误',
-    };
-  }
-}
-
-export async function createCharacter(params: CreateCharacterParams): Promise<ApiResponse<Character>> {
-  try {
-    const response = await fetch('/api/characters', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(params),
-    });
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return {
-      success: false,
-      message: '创建角色时发生错误',
-    };
-  }
-=======
   personality: string[];
   generatedDescription: string;
   imageUrl: string;
@@ -136,5 +82,4 @@ export async function shareContent(params: ShareParams): Promise<ApiResponse<{
   }
 
   return response.json();
->>>>>>> 2fad80e7f1060f51d92b717b4fa501d99e9fe465
 } 

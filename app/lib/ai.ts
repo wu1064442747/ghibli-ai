@@ -45,7 +45,7 @@ Please provide:
 Format the response in a clear, narrative style that captures the whimsical and emotional depth of Ghibli characters.`;
 };
 
-export async function generateImageWithStability(params: GenerateImageParams) {
+export async function generateImageWithStability(prompt: string) {
   try {
     const response = await fetch(`${STABILITY_API_ENDPOINT}/generation/stable-diffusion-xl-1024-v1-0/text-to-image`, {
       method: 'POST',
@@ -57,7 +57,7 @@ export async function generateImageWithStability(params: GenerateImageParams) {
       body: JSON.stringify({
         text_prompts: [
           {
-            text: getGhibliPrompt(params.prompt, params.style),
+            text: getGhibliPrompt(prompt, 'ghibli'),
             weight: 1
           },
           {

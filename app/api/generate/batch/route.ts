@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GenerateImageParams } from '@/types';
-import { generateImageWithStability } from '@/lib/ai';
+import { generateImageWithStability } from '@/lib/stability';
 
 export async function POST(request: Request) {
   try {

@@ -19,7 +19,10 @@ export async function POST(request: Request) {
 
     // 使用 Stability AI 生成角色图片
     const imagePrompt = `A ${age} ${role} character in Ghibli style, ${description}, ${personality.join(', ')}`;
-    const imageUrl = await generateImageWithStability(imagePrompt);
+    const imageUrl = await generateImageWithStability({
+      prompt: imagePrompt,
+      style: 'ghibli',
+    });
 
     // 返回生成的角色信息
     return NextResponse.json({

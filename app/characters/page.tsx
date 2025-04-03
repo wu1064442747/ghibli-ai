@@ -37,7 +37,11 @@ export default function CharactersPage() {
       });
 
       if (result.success && result.data) {
-        addCreatedCharacter(result.data);
+        addCreatedCharacter({
+          ...result.data,
+          id: Date.now().toString(),
+          timestamp: new Date().toISOString(),
+        });
         setName('');
         setDescription('');
         setAge('少年');
@@ -145,9 +149,9 @@ export default function CharactersPage() {
         <div className="mt-12">
           <h2 className="text-2xl font-bold mb-6">已创建的角色</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {createdCharacters.map((character, index) => (
+            {createdCharacters.map((character) => (
               <div
-                key={index}
+                key={character.id}
                 className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
               >
                 {character.imageUrl && (

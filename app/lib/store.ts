@@ -85,6 +85,7 @@ export const useGenerateStore = create<GenerateState>((set, get) => ({
     set((state) => ({
       generatedImages: [
         {
+          id: Date.now().toString(),
           imageUrl,
           prompt: state.prompt,
           style: state.style,
