@@ -68,7 +68,7 @@ interface PromptState {
 }
 
 // 创建状态存储
-export const useGenerateStore = create<GenerateState>((set, get) => ({
+export const useGenerateStore = create<GenerateState>((set) => ({
   prompt: '',
   style: 'ghibli',
   isGenerating: false,
@@ -88,11 +88,12 @@ export const useGenerateStore = create<GenerateState>((set, get) => ({
     try {
       const result = await apiGenerateImage({ prompt, style });
       if (result.success && result.data) {
+        const imageData = result.data as { imageUrl: string };
         set((state) => ({
           generatedImages: [
             {
               id: Date.now().toString(),
-              imageUrl: result.data.imageUrl,
+              imageUrl: imageData.imageUrl,
               prompt,
               style,
               timestamp: new Date().toISOString(),
