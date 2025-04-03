@@ -3,6 +3,15 @@ import { GenerateImageParams } from '@/types';
 const STABILITY_API_KEY = process.env.STABLE_DIFFUSION_API_KEY;
 const STABILITY_API_ENDPOINT = process.env.STABILITY_API_ENDPOINT;
 
+interface GenerateImageParams {
+  prompt: string;
+  style?: string;
+  cfg_scale?: number;
+  steps?: number;
+  width?: number;
+  height?: number;
+}
+
 // 生成图片的提示词模板
 const getGhibliPrompt = (prompt: string) => {
   return `Create a Ghibli-style illustration of ${prompt}. The image should have the following characteristics:
@@ -13,15 +22,6 @@ const getGhibliPrompt = (prompt: string) => {
 - High quality and detailed background
 - Characteristic Ghibli lighting and shadows`;
 };
-
-interface GenerateImageParams {
-  prompt: string;
-  style?: string;
-  cfg_scale?: number;
-  steps?: number;
-  width?: number;
-  height?: number;
-}
 
 export async function generateImageWithStability({
   prompt,
@@ -36,6 +36,9 @@ export async function generateImageWithStability({
     throw new Error('Stability API key not found');
   }
 
+  // 使用 Ghibli 风格的提示词增强原始提示词
+  const enhancedPrompt = style === 'ghibli' ? getGhibliPrompt(prompt) : `${prompt}, ${style} style`;
+
   const response = await fetch(
     'https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image',
     {
@@ -48,7 +51,7 @@ export async function generateImageWithStability({
       body: JSON.stringify({
         text_prompts: [
           {
-            text: `${prompt}, ${style} style`,
+            text: enhancedPrompt,
             weight: 1,
           },
         ],
