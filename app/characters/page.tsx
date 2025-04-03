@@ -2,43 +2,17 @@
 
 import React, { useState } from 'react';
 import { useCharacterStore } from '@/lib/store';
-import { createCharacter } from '@/lib/api';
 
 export default function CharacterPage() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [age, setAge] = useState('少年');
-  const [role, setRole] = useState('');
-  const [personality, setPersonality] = useState<string[]>([]);
   const { isCreating, characters, createCharacter } = useCharacterStore();
-
-  const personalityOptions = ['勇敢', '善良', '智慧', '坚强', '活泼', '神秘', '温柔', '正义'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await createCharacter({
-      name,
-      description,
-      age,
-      role,
-      personality,
-    });
-
-    if (result.success && result.data) {
-      setName('');
-      setDescription('');
-      setAge('少年');
-      setRole('');
-      setPersonality([]);
-    }
-  };
-
-  const togglePersonality = (trait: string) => {
-    setPersonality(prev =>
-      prev.includes(trait)
-        ? prev.filter(p => p !== trait)
-        : [...prev, trait]
-    );
+    await createCharacter({ name, description });
+    setName('');
+    setDescription('');
   };
 
   return (
@@ -68,47 +42,6 @@ export default function CharacterPage() {
                 placeholder="描述角色的特点、性格和背景故事..."
                 className="w-full h-32 px-4 py-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <select
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                className="px-4 py-3 rounded-lg bg-gray-50 text-gray-900 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-              >
-                <option value="少年">少年</option>
-                <option value="青年">青年</option>
-                <option value="中年">中年</option>
-                <option value="老年">老年</option>
-              </select>
-
-              <input
-                type="text"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                placeholder="角色身份"
-                className="px-4 py-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">性格特征</label>
-              <div className="flex flex-wrap gap-2">
-                {personalityOptions.map((trait) => (
-                  <button
-                    key={trait}
-                    type="button"
-                    onClick={() => togglePersonality(trait)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                      personality.includes(trait)
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-500 hover:bg-gray-300'
-                    }`}
-                  >
-                    {trait}
-                  </button>
-                ))}
-              </div>
             </div>
 
             <button
