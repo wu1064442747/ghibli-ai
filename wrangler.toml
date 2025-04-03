@@ -1,0 +1,14 @@
+name = "ghibli-ai"
+compatibility_date = "2024-01-01"
+
+[build]
+command = "npm run build"
+output_dir = ".next"
+
+[env.production]
+routes = [
+  { pattern = "ghibli-ai.pages.dev", zone_name = "pages.dev" }
+]
+
+[site]
+bucket = ".next" 
